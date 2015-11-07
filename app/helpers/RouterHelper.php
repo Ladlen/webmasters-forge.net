@@ -8,21 +8,28 @@
 class RouterHelper
 {
     /**
-     * Default controller name.
-     *
-     * @var string
+     * URL parts for default page.
+     * @var array
      */
-    protected $defaultController = 'SiteController';
+    protected $pageDefault = ['controller' => 'site', 'action' => 'index'];
 
     /**
-     * Default action name.
-     *
-     * @var string
+     * URL parts for empty page.
+     * @var array
      */
-    protected $defaultAction = 'actionIndex';
+    protected $page404 = ['controller' => 'site', 'action' => '404'];
 
-    protected $config;
+    /**
+     * Url parts.
+     * @var array|null
+     */
     protected $parts;
+
+    /**
+     * Configuration.
+     * @var array
+     */
+    protected $config;
 
     public function __construct($config)
     {
@@ -30,60 +37,72 @@ class RouterHelper
     }
 
     /**
-     * Get controller name.
+     * Create controller name.
      *
-     * @return string
+     * @param string $controllerPart url part of the controller
+     * @return string controller name
      */
-    protected function getController()
+    protected function getControllerName($controllerPart)
     {
-        $controller = $this->defaultController;
-        if (!empty($this->parts[0]))
+        $controller = $this->pageDefault['controller'];
+        if (!empty($controllerPart))
         {
-            $controller = ucfirst($this->parts[0]) . 'Controller';
+            $controller = ucfirst($controllerPart) . 'Controller';
         }
         return $controller;
     }
 
     /**
-     * Get action name.
+     * Create action name.
      *
-     * @return string
+     * @param string $actionName url part of the action
+     * @return string action name
      */
-    protected function getAction()
+    protected function getActionName($actionName)
     {
-        $action = $this->defaultAction;
-        if (!empty($this->parts[1]))
+        $action = $this->pageDefault['action'];
+        if (!empty($actionName))
         {
-            $action = 'action' . ucfirst($this->parts[1]);
+            $action = 'action' . ucfirst($actionName);
         }
         return $action;
     }
 
+    /**
+     * Analyse URL then evoke controller action.
+     */
     public function run()
     {
-        $controller = $this->defaultController;
-        $action = $this->defaultAction;
+        $controllerName = $this->getControllerName($this->pageDefault['controller']);
+        $actionName = $this->getActionName($this->pageDefault['action']);
 
         if (isset($_REQUEST['route']))
         {
             $route = trim($_REQUEST['route'], '/\\');
             $this->parts = explode('/', $route);
 
-            $controller = $this->getController();
-            $action = $this->getAction();
+            if (isset($this->parts[0]))
+            {
+                $controllerName = $this->getControllerName($this->parts[0]);
+            }
+            if (isset($this->parts[1]))
+            {
+                $actionName = $this->getActionName($this->parts[1]);
+            }
         }
 
-        if (!is_readable(APP_DIR . "controllers/$controller.php"))
+        if (!is_readable(APP_DIR . "controllers/$controllerName.php"))
         {
             // No such page.
-            $controller = 'SiteController';
-            $action = 'action404';
+            $controllerName = $this->getControllerName($this->page404['controller']);
+            $actionName = $this->getActionName($this->page404['action']);
         }
-        elseif (!is_callable(array($controller, 'action' . ucfirst($action))))
+        elseif (!is_callable(array($controllerName, 'action' . ucfirst($actionName))))
         {
-            $action = 'actionIndex';
+            // No action in the controller.
+            $actionName = $this->getActionName('index');
         }
 
-        (new $controller($this->config))->$action();
+        (new $controllerName($this->config))->$actionName($this->parts);
     }
 }
