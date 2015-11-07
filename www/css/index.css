@@ -1,0 +1,77 @@
+html, body {
+    overflow: hidden;
+    font-family: Helvetica, Arial, Verdana;
+    font-size: 14px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    position: relative;
+    margin: 20px auto;
+    width: 80%;
+    min-width: 300px;
+}
+
+#header {
+    margin-bottom: 15px;
+    border-bottom: 1px solid black;
+}
+
+#list .id, #header .id, #list .age, #header .age, #list .delete, #header .delete {
+    text-align: center;
+}
+
+.id {
+    width: 9%;
+    display: inline-block;
+    border-right: 1px solid black;
+}
+
+.name {
+    width: 39%;
+    display: inline-block;
+    border-right: 1px solid black;
+}
+
+.age {
+    width: 9%;
+    display: inline-block;
+    border-right: 1px solid black;
+}
+
+.city_id {
+    width: 19%;
+    display: inline-block;
+    border-right: 1px solid black;
+}
+
+.delete {
+    width: 19%;
+    display: inline-block;
+}
+
+#create_user {
+    margin-top: 15px;
+}
+
+#create_user, #no_users {
+    text-align: center;
+    width: 100%;
+}
+
+#new_user .row {
+    color: red;
+}
+
+#new_user .caption {
+    text-align: center;
+}
+
+#list .name:hover, #list .age:hover, #list .city_id:hover {
+    background-color:beige;
+    cursor: pointer;
+}
