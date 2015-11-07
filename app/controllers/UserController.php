@@ -5,7 +5,7 @@
 #require_once(APP_DIR . 'models/City.php');
 #require_once(APP_DIR . 'helpers/prepareJSON.php');
 
-class UserController extends Controller
+class UserController extends ControllerController
 {
     public function __construct($config)
     {
