@@ -1,41 +1,12 @@
 <?php
 
-class ControllerController
+abstract class ControllerController
 {
     protected $config;
-
-    protected $parts;
 
     public function __construct($config)
     {
         $this->config = $config;
-
-        $controller = 'site';   // Default controller.
-        $action = 'index';      // Default action.
-
-        if (isset($_REQUEST['route']))
-        {
-            $route = trim($_REQUEST['route'], '/\\');
-            $this->parts = explode('/', $route);
-            if (!empty($this->parts[0]))
-            {
-                $controller = $this->parts[0];
-            }
-            if (!empty($this->parts[1]))
-            {
-                $action = $this->parts[1];
-            }
-        }
-
-        #if (is_dir(APP_DIR . )
-
-
-        $actionName = isset($_REQUEST['route']) ? $_REQUEST['route'] : 'index';
-        $functionName = 'action' . ucfirst($actionName);
-        if(is_callable($this, $functionName))
-        {
-            $this->$functionName();
-        }
     }
 
     protected function renderPhpFile($file, $params = [])
@@ -48,10 +19,19 @@ class ControllerController
         return ob_get_clean();
     }
 
-    protected function render($file, $params)
+    protected function render($file, $params = [])
     {
         $scripts = '';
         $content = $this->renderPhpFile($file, $params);
-        require(APP_DIR . 'views/layout.php');
+        require(APP_DIR . 'views/layouts/main.php');
     }
+
+    protected function getViewsPath()
+    {
+        $className = get_class($this);
+        $folderName = substr($className, 0, -strlen('Controller'));
+        return APP_DIR . "views/$folderName/";
+    }
+
+    abstract function actionIndex();
 }
