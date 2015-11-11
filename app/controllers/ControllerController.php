@@ -1,6 +1,6 @@
 <?php
 
-abstract class ControllerController
+class ControllerController
 {
     /**
      * Default page title.
@@ -14,6 +14,7 @@ abstract class ControllerController
     public function __construct($config)
     {
         $this->config = $config;
+        $this->title = '';
     }
 
     protected function renderPhpFile($file, $params = [])
@@ -26,11 +27,20 @@ abstract class ControllerController
         return ob_get_clean();
     }
 
-    protected function render($file, $params = [])
+    protected function render($view, $params = [])
     {
+        $file = $this->getViewsPath() . "$view.php";
+
         $scripts = '';
         $content = $this->renderPhpFile($file, $params);
         require(APP_DIR . 'views/layouts/main.php');
+    }
+
+    protected function renderPartial($view, $params = [])
+    {
+        $file = $this->getViewsPath() . "$view.php";
+        extract($params, EXTR_OVERWRITE);
+        require($file);
     }
 
     protected function getViewsPath()
@@ -63,6 +73,6 @@ abstract class ControllerController
      * Default action.
      *
      * @return mixed
-     */
-    abstract function actionIndex();
+     *
+    abstract function actionIndex();*/
 }

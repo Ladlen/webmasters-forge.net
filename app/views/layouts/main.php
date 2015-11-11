@@ -7,8 +7,6 @@
     <?php echo $scripts ?>
 </head>
 <body>
-<div id="content">
     <?php echo $content ?>
-</div>
 </body>
 </html>

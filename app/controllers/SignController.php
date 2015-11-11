@@ -1,11 +1,6 @@
 <?php
 
-#require_once(APP_DIR . 'controllers/ControllerController.php');
-#require_once(APP_DIR . 'models/User.php');
-#require_once(APP_DIR . 'models/City.php');
-#require_once(APP_DIR . 'helpers/prepareJSON.php');
-
-class UserController extends ControllerController
+class SignController extends ControllerController
 {
     public function __construct($config)
     {
@@ -14,9 +9,10 @@ class UserController extends ControllerController
 
     public function actionIndex()
     {
-        $model = User::GetAllUsers();
-        $cities = City::GetAllCities();
-        $this->render(APP_DIR . 'views/User.php', ['model' => $model->rows, 'cities' => $cities->rows]);
+        #$model = User::GetAllUsers();
+        #$cities = City::GetAllCities();
+        #$this->render('index', ['model' => $model->rows, 'cities' => $cities->rows]);
+        $this->renderPartial('index');
     }
 
     public function actionUpdate()
